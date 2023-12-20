@@ -55,13 +55,13 @@ EndIf
 
 Func main()
 	createGUI()
-	Run("js_scripts/squadMortarServerWebsiteSilent.exe")
+	Run("scripts/squadMortarServerWebsiteSilent.exe")
 	If WinExists("Squad") == 1 Then
 		DirRemove("frontend/public/merged", 1)
 		DirCreate("frontend/public/merged")
 		DirRemove("runtime", 1)
 		DirCreate("runtime")
-		Run("js_scripts/squadMortarServerSilent.exe")
+		Run("scripts/squadMortarServerSilent.exe")
 		AdlibRegister("syncMap", 500)
 		runSquadMortar()
 	Else
@@ -74,8 +74,7 @@ Func runSquadMortar()
 	While True
 		Sleep(1000)
 		syncCoordinates()
-		PixelSearch(100, 100, 100, 100, "0x000000", 0, 1, $hWnd)
-		If @error Then
+		If isMortarNotActive() Then
 			Sleep(1000)
 			ContinueLoop
 		EndIf
@@ -105,6 +104,9 @@ Func angleMortar()
 	$fAngle = $oData.fAngle
 	Local $hTime = TimerInit()
 	Do
+		If isMortarNotActive() Then
+			Return
+		EndIf
 		$fAngleOcr = Number(getOCRAngle(), 3)
 		If Not @error And $fAngleOcr > 0 And $fAngleOcr < 360 Then
 			If $fAngleOcr == $fAngle Then
@@ -121,7 +123,7 @@ Func angleMortar()
 				$fTimes = -$fDiff
 				$sKey = "a"
 			EndIf
-			cSend($fTimes * 19.98, 200, $sKey)
+			cSend($fTimes * 19.757, 200, $sKey)
 
 			$fAngleOcr = Number(getOCRAngle(), 3)
 			;ConsoleWrite($fAngleOcr & " OCR Coordinates" & @CRLF)
@@ -163,35 +165,42 @@ EndFunc   ;==>angleMortar
 Func rangeMortar($i)
 	Local $hTime = TimerInit()
 	Do
-		PixelSearch($aCoordinates[$iResolution][$iMortarRangeLine][0], $aCoordinates[$iResolution][$iMortarRangeLine][1], $aCoordinates[$iResolution][$iMortarRangeLine][2], $aCoordinates[$iResolution][$iMortarRangeLine][3], "0x000000", 0, 1, $hWnd)
-		If Not @error Then
-			$iRangeOcr = Number(getOCRRange())
-			If Not @error And $iRangeOcr > 809 And $iRangeOcr < 1581 Then
-				If $iRangeOcr == $aCoordinatesRange[$i] Then
-					Return True
-				EndIf
-				Local $fTimes
-				If $iRangeOcr < $aCoordinatesRange[$i] Then
-					$fTimes = ($aCoordinatesRange[$i] - $iRangeOcr) / 10
-					$sKey = "w"
-				EndIf
-				If $iRangeOcr > $aCoordinatesRange[$i] Then
-					$fTimes = ($iRangeOcr - $aCoordinatesRange[$i]) / 10
-					$sKey = "s"
-				EndIf
-				cSend($fTimes * 62.5, 0, $sKey)
+		If isMortarNotActive() Then
+			Return False
+		EndIf
+		$iRangeOcr = Number(getOCRRange())
+		If Not @error And $iRangeOcr > 809 And $iRangeOcr < 1581 Then
+			If $iRangeOcr == $aCoordinatesRange[$i] Then
 				Return True
 			EndIf
+			Local $fTimes
+			If $iRangeOcr < $aCoordinatesRange[$i] Then
+				$fTimes = ($aCoordinatesRange[$i] - $iRangeOcr) / 10
+				$sKey = "w"
+			EndIf
+			If $iRangeOcr > $aCoordinatesRange[$i] Then
+				$fTimes = ($iRangeOcr - $aCoordinatesRange[$i]) / 10
+				$sKey = "s"
+			EndIf
+			cSend($fTimes * 62.5, 0, $sKey)
+			Return True
 		EndIf
 		cSend(0, 0, "w")
 	Until 5000 < TimerDiff($hTime)
 	Return False
 EndFunc   ;==>rangeMortar
 
+Func isMortarNotActive()
+	PixelSearch(100, 100, 100, 100, "0x000000", 0, 1, $hWnd)
+	If @error Then
+		Return True
+	Else
+		Return False
+	EndIf
+EndFunc   ;==>isMortarNotActive
 Func syncExitLoop($bWithPixelSearch = True)
 	If $bWithPixelSearch Then
-		PixelSearch(100, 100, 100, 100, "0x000000", 0, 1, $hWnd)
-		If @error Then
+		If isMortarNotActive() Then
 			Return True
 		EndIf
 	EndIf
@@ -325,8 +334,8 @@ Func syncMap()
 	Local $hHBitmap = _ScreenCapture_CaptureWnd("", "Squad", $aCoordinates[$iResolution][$iMapCoordinates][0], $aCoordinates[$iResolution][$iMapCoordinates][1], $aCoordinates[$iResolution][$iMapCoordinates][2], $aCoordinates[$iResolution][$iMapCoordinates][3], False)
 	_ScreenCapture_SaveImage("runtime/screenshot.jpg", $hHBitmap)
 	Local $sImageNames = StringSplit($sFileContent, ";", 2)
-	Run("./js_scripts/imageLayeringSilent runtime/screenshot.jpg frontend/public/" & $sImageNames[0] & " frontend/public/merged/" & $sImageNames[1])
-	;ConsoleWrite("./js_scripts/imageLayeringSilent runtime/screenshot.jpg frontend/public/" & $sImageNames[0] & " frontend/public/merged/" & $sImageNames[1] & @CRLF)
+	Run("./scripts/imageLayeringSilent runtime/screenshot.jpg frontend/public/" & $sImageNames[0] & " frontend/public/merged/" & $sImageNames[1])
+	;ConsoleWrite("./scripts/imageLayeringSilent runtime/screenshot.jpg frontend/public/" & $sImageNames[0] & " frontend/public/merged/" & $sImageNames[1] & @CRLF)
 	;ConsoleWrite("Screenshot taken" & @CRLF)
 
 EndFunc   ;==>syncMap
@@ -343,11 +352,6 @@ Func setCoordinates()
 	$aCoordinates[$i1024x768][$iMortarRangeOcr][1] = 400
 	$aCoordinates[$i1024x768][$iMortarRangeOcr][2] = 256
 	$aCoordinates[$i1024x768][$iMortarRangeOcr][3] = 430
-
-	$aCoordinates[$i1024x768][$iMortarRangeLine][0] = 262
-	$aCoordinates[$i1024x768][$iMortarRangeLine][1] = 412
-	$aCoordinates[$i1024x768][$iMortarRangeLine][2] = 262
-	$aCoordinates[$i1024x768][$iMortarRangeLine][3] = 416
 
 	$aCoordinates[$i1024x768][$iIsMapActive][0] = 700
 	$aCoordinates[$i1024x768][$iIsMapActive][1] = 133
@@ -370,11 +374,6 @@ Func setCoordinates()
 	$aCoordinates[$i1920x1080][$iMortarRangeOcr][2] = 605
 	$aCoordinates[$i1920x1080][$iMortarRangeOcr][3] = 560
 
-	$aCoordinates[$i1920x1080][$iMortarRangeLine][0] = 593
-	$aCoordinates[$i1920x1080][$iMortarRangeLine][1] = 536
-	$aCoordinates[$i1920x1080][$iMortarRangeLine][2] = 593
-	$aCoordinates[$i1920x1080][$iMortarRangeLine][3] = 543
-
 	$aCoordinates[$i1920x1080][$iIsMapActive][0] = 1050
 	$aCoordinates[$i1920x1080][$iIsMapActive][1] = 141
 	$aCoordinates[$i1920x1080][$iIsMapActive][2] = 1500
@@ -395,11 +394,6 @@ Func setCoordinates()
 	$aCoordinates[$i2560x1440][$iMortarRangeOcr][1] = 688
 	$aCoordinates[$i2560x1440][$iMortarRangeOcr][2] = 798
 	$aCoordinates[$i2560x1440][$iMortarRangeOcr][3] = 750
-
-	$aCoordinates[$i2560x1440][$iMortarRangeLine][0] = 795
-	$aCoordinates[$i2560x1440][$iMortarRangeLine][1] = 710
-	$aCoordinates[$i2560x1440][$iMortarRangeLine][2] = 795
-	$aCoordinates[$i2560x1440][$iMortarRangeLine][3] = 730
 
 	$aCoordinates[$i2560x1440][$iIsMapActive][0] = 1900
 	$aCoordinates[$i2560x1440][$iIsMapActive][1] = 190

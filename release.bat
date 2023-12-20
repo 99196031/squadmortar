@@ -9,11 +9,11 @@ mkdir release
 :: Copy squadmortar.exe to the 'release' folder
 copy squadmortar.exe release
 
-:: Copy the '/js_scripts' folder to the 'release' folder
-xcopy /s /e /i js_scripts release\js_scripts
+:: Copy the '/scripts' folder to the 'release' folder
+xcopy /s /e /i scripts release\scripts
 
-:: Delete all files in 'release\js_scripts' except for specified ones
-for %%f in (release\js_scripts\*) do (
+:: Delete all files in 'release\scripts' except for specified ones
+for %%f in (release\scripts\*) do (
     if /I "%%~nxf" neq "squadMortarServerSilent.exe" (
         if /I "%%~nxf" neq "imageLayeringSilent.exe" (
             if /I "%%~nxf" neq "squadMortarServerWebsiteSilent.exe" (
@@ -23,7 +23,7 @@ for %%f in (release\js_scripts\*) do (
     )
 )
 
-if exist release\js_scripts\node_modules rmdir /s /q release\js_scripts\node_modules
+if exist release\scripts\node_modules rmdir /s /q release\scripts\node_modules
 
 mkdir release\autoit_libraries
 copy autoit_libraries\mp.x64.dll release\autoit_libraries

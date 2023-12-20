@@ -61,9 +61,7 @@ Feel free to explore the code and contribute to the project!
     ```cmd 
   pkg squadMortarServerWebsite.js -t=win
   ```
-  ```cmd 
-  pkg imageLayering.js -t=win
-  ```
+
 - Use `create-nodew-exe` to create silent versions: 
   
   ```cmd 
@@ -75,5 +73,5 @@ Feel free to explore the code and contribute to the project!
   ```
 
    ```cmd 
-   create-nodew-exe imageLayering.exe imageLayeringSilent.exe
+   python -m PyInstaller --onefile --noconsole --name imageLayeringSilent imageLayering.py
    ```
