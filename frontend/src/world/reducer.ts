@@ -80,35 +80,18 @@ export const world: Reducer<World, StoreAction> = (state, action) => {
                 const elapsedTime = endTime - performanceStart;
                 console.log(`Elapsed time: ${elapsedTime} milliseconds`);
               } else {
-                const currentTime = Date.now();
-                if (currentTime - startTime < 20000) {
-                  // Retry fetching the image after a delay of 1000 ms (1 second)
-                  setTimeout(tryFetchImage, 1000);
-                } else {
-                  // Fallback to the original image source if retries have exceeded 20 seconds
-                  action.payload.state.minimap.texture.image.src = action.payload.state.minimap.texture.source;
-                }
-              }
-            })
-            .catch((error) => {
-              const currentTime = Date.now();
-              if (currentTime - startTime < 20000) {
-                // Retry fetching the image after a delay of 1000 ms (1 second)
-                setTimeout(tryFetchImage, 1000);
-              } else {
-                // Fallback to the original image source if retries have exceeded 20 seconds
                 action.payload.state.minimap.texture.image.src = action.payload.state.minimap.texture.source;
               }
-            });
+            })
         };
 
-        fetch("http://localhost:4545/refreshmap/", {
+        fetch("http://localhost:3000/refreshmap/", {
           method: 'POST',
           mode: "no-cors",
           headers: {
             'Content-Type': 'text/plain'
           },
-          body: action.payload.state.minimap.texture.source + ";merged_" + cacheBuster + ".jpg"
+          body: action.payload.state.minimap.texture.source + ";merged_" + cacheBuster + ".jpg" + ";" + (action.payload.active ? 1 : 0)
         }).then((response) => {
           tryFetchImage();
         });
@@ -142,7 +125,7 @@ export const world: Reducer<World, StoreAction> = (state, action) => {
               coorArray = coorArray + dataToSave;
             });
           });
-          fetch("http://localhost:4545/coordinates", {
+          fetch("http://localhost:3000/coordinates", {
             method: 'POST',
             mode: "no-cors",
             headers: {

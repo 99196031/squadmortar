@@ -7,13 +7,6 @@
 Global $aCoordinatesRange[0]
 Global $aCoordinatesAngle[0]
 Global $hWnd = WinGetHandle("Squad")
-Global $aCoordinates[3][5][4]
-Const $i1024x768 = 0
-Const $i1920x1080 = 1
-Const $i2560x1440 = 2
-Const $iMortarAngleOcr = 0
-Local $aWinPos = WinGetClientSize("Squad")
-Global $iResolution = Eval("i" & $aWinPos[0] & "x" & $aWinPos[1])
 setCoordinates()
 _GDIPlus_Startup()
 $fMagicNumber = 19.92
@@ -59,16 +52,6 @@ While True
 	cSend(0, 0, "d")
 	Sleep(300)
 WEnd
-
-
-Func setCoordinates()
-	;=================================================== 1920x1080
-	$aCoordinates[$i1920x1080][$iMortarAngleOcr][0] = 938
-	$aCoordinates[$i1920x1080][$iMortarAngleOcr][1] = 1052
-	$aCoordinates[$i1920x1080][$iMortarAngleOcr][2] = 980
-	$aCoordinates[$i1920x1080][$iMortarAngleOcr][3] = 1063
-EndFunc   ;==>setCoordinates
-
 
 Func getOCRAngle()
 	Local $hHBitmap = _ScreenCapture_CaptureWnd("", "Squad", $aCoordinates[$iResolution][$iMortarAngleOcr][0], $aCoordinates[$iResolution][$iMortarAngleOcr][1], $aCoordinates[$iResolution][$iMortarAngleOcr][2], $aCoordinates[$iResolution][$iMortarAngleOcr][3], False)

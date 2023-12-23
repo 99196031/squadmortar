@@ -31,7 +31,9 @@ export type EntityAction =
   | {type: EntityActionType.remove, payload: HasEntityId}
   | {type: EntityActionType.removeAllTargets, payload: {}}
   | {type: EntityActionType.syncTargets, payload: {state: any}}
-  | {type: EntityActionType.syncMap, payload: {state: any}}
+  | {type: EntityActionType.syncMap, payload: {
+    active: any;state: any
+}}
 
 
 export enum TransformActionType {

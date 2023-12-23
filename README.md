@@ -28,18 +28,16 @@ Note: The release is approximately 300 MB due to included maps.
 3. Unzip the downloaded file.
 4. Inside the folder, run `squadmortar.exe` while squad is already running.
 
+Note: Don't move `squadmortar.exe` from it's original folder.
+
 ## Join Discord
 Feel free to join our Discord community for discussions, support, and updates: [SquadAutoMortars Discord](https://discord.gg/Qc5y4satdz).
 
 ## EAC Ban Disclaimer
 No, the usage of SquadAutoMortars does not violate Easy Anti-Cheat (EAC) policies. The program operates without attaching to or reading memory from the Squad game process. It solely captures screenshots using standard operating system APIs and sends keyboard inputs (a, w, s, d). The code is open source, providing transparency and assurance.
 
-## Single Monitor Usage
-If you only have one monitor, resizing Squad to a 1024x768 windowed mode is recommended for a more convenient experience. Refer to the demo video for guidance.
-
 ## Supported Sizes
-- 1024x768 windowed only
-- 1920x1080, 2560x1440 borderless and fullscreen only
+1024x768, 1920x1080, 2560x1440, 3480x1600
 
 ## Unsupported Screen Size
 If your screen size is not supported, please join our Discord community for assistance: [SquadAutoMortars Discord](https://discord.gg/Qc5y4satdz).
@@ -54,24 +52,13 @@ Feel free to explore the code and contribute to the project!
 - To compile the executable for JS, follow these steps:
   - Download [Node.js v18.18.2](https://nodejs.org/download/release/v18.18.2/node-v18.18.2-x64.msi).
   - Run `npm install -g pkg` in the terminal.
-  - Execute 
-  ```cmd 
-  pkg squadMortarServer.js -t=win
-  ```
-    ```cmd 
-  pkg squadMortarServerWebsite.js -t=win
-  ```
 
-- Use `create-nodew-exe` to create silent versions: 
+- Use `create-nodew-exe` and  `pkg` to create silent versions: 
   
   ```cmd 
-  create-nodew-exe squadMortarServer.exe squadMortarServerSilent.exe
+  pkg squadMortarServer.js -t=win && create-nodew-exe squadMortarServer.exe squadMortarServerSilent.exe
   ```
-
-   ```cmd 
-  create-nodew-exe squadMortarServerWebsite.exe squadMortarServerWebsiteSilent.exe
-  ```
-
+- Python for the ImageLayering
    ```cmd 
    python -m PyInstaller --onefile --noconsole --name imageLayeringSilent imageLayering.py
    ```

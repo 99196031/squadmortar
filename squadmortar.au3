@@ -9,9 +9,6 @@
 #include "autoit_libraries/common.au3"
 #include "autoit_libraries/GUI.au3"
 #include "autoit_libraries/mp.au3"
-#include <SendMessage.au3>
-#include <WindowsConstants.au3>
-#include <ScrollBarConstants.au3>
 
 
 ; Enables GUI events
@@ -27,25 +24,10 @@ _MP_Init()
 Global $oData = _MP_SharedData()
 Global $aCoordinatesRange[0]
 Global $aCoordinatesAngle[0]
-Global $hWnd = WinGetHandle("Squad")
-Global $aCoordinates[3][5][4]
-Global $bActiveSquadOnMapSync = False
-
-Const $i1024x768 = 0
-Const $i1920x1080 = 1
-Const $i2560x1440 = 2
-Const $iMortarAngleOcr = 0
-Const $iMortarRangeOcr = 1
-Const $iMortarRangeLine = 2
-Const $iIsMapActive = 3
-Const $iMapCoordinates = 4
+Global $hWnd = WinGetHandle("SquadGame")
 
 _GDIPlus_Startup()
 setCoordinates()
-If WinExists("Squad") == 1 Then
-	Local $aWinPos = WinGetClientSize("Squad")
-	Global $iResolution = Eval("i" & $aWinPos[0] & "x" & $aWinPos[1])
-EndIf
 
 If _MP_IsMain() Then
 	main()
@@ -55,14 +37,12 @@ EndIf
 
 Func main()
 	createGUI()
-	Run("scripts/squadMortarServerWebsiteSilent.exe")
-	If WinExists("Squad") == 1 Then
+	Run("scripts/squadMortarServerSilent.exe")
+	If WinExists("SquadGame") == 1 Then
 		DirRemove("frontend/public/merged", 1)
 		DirCreate("frontend/public/merged")
 		DirRemove("runtime", 1)
 		DirCreate("runtime")
-		Run("scripts/squadMortarServerSilent.exe")
-		AdlibRegister("syncMap", 500)
 		runSquadMortar()
 	Else
 		While 1
@@ -70,6 +50,7 @@ Func main()
 		WEnd
 	EndIf
 EndFunc   ;==>main
+
 Func runSquadMortar()
 	While True
 		Sleep(1000)
@@ -123,7 +104,7 @@ Func angleMortar()
 				$fTimes = -$fDiff
 				$sKey = "a"
 			EndIf
-			cSend($fTimes * 19.757, 200, $sKey)
+			cSend($fTimes * 19.78, 200, $sKey)
 
 			$fAngleOcr = Number(getOCRAngle(), 3)
 			;ConsoleWrite($fAngleOcr & " OCR Coordinates" & @CRLF)
@@ -198,6 +179,7 @@ Func isMortarNotActive()
 		Return False
 	EndIf
 EndFunc   ;==>isMortarNotActive
+
 Func syncExitLoop($bWithPixelSearch = True)
 	If $bWithPixelSearch Then
 		If isMortarNotActive() Then
@@ -214,7 +196,7 @@ Func syncExitLoop($bWithPixelSearch = True)
 EndFunc   ;==>syncExitLoop
 
 Func getOCRRange()
-	Local $hHBitmap = _ScreenCapture_CaptureWnd("", "Squad", $aCoordinates[$iResolution][$iMortarRangeOcr][0], $aCoordinates[$iResolution][$iMortarRangeOcr][1], $aCoordinates[$iResolution][$iMortarRangeOcr][2], $aCoordinates[$iResolution][$iMortarRangeOcr][3], False)
+	Local $hHBitmap = _ScreenCapture_CaptureWnd("", "SquadGame", $aCoordinates[$iResolution][$iMortarRangeOcr][0], $aCoordinates[$iResolution][$iMortarRangeOcr][1], $aCoordinates[$iResolution][$iMortarRangeOcr][2], $aCoordinates[$iResolution][$iMortarRangeOcr][3], False)
 	Local $hBitmap = _GDIPlus_BitmapCreateFromHBITMAP($hHBitmap)
 	Local $aDim = _GDIPlus_ImageGetDimension($hBitmap)
 	If @error Then
@@ -249,7 +231,7 @@ Func getOCRRange()
 EndFunc   ;==>getOCRRange
 
 Func getOCRAngle()
-	Local $hHBitmap = _ScreenCapture_CaptureWnd("", "Squad", $aCoordinates[$iResolution][$iMortarAngleOcr][0], $aCoordinates[$iResolution][$iMortarAngleOcr][1], $aCoordinates[$iResolution][$iMortarAngleOcr][2], $aCoordinates[$iResolution][$iMortarAngleOcr][3], False)
+	Local $hHBitmap = _ScreenCapture_CaptureWnd("", "SquadGame", $aCoordinates[$iResolution][$iMortarAngleOcr][0], $aCoordinates[$iResolution][$iMortarAngleOcr][1], $aCoordinates[$iResolution][$iMortarAngleOcr][2], $aCoordinates[$iResolution][$iMortarAngleOcr][3], False)
 	Local $hBitmap = _GDIPlus_BitmapCreateFromHBITMAP($hHBitmap)
 	Local $aDim = _GDIPlus_ImageGetDimension($hBitmap)
 	If @error Then
@@ -304,105 +286,3 @@ Func syncCoordinates()
 	Next
 EndFunc   ;==>syncCoordinates
 
-Func syncMap()
-	Local $sFileContent = FileRead("runtime/refreshmap.txt")
-	If @error Then
-		Return
-	EndIf
-	If $sFileContent == "" Then
-		Return
-	EndIf
-	Local $hFile = FileOpen("runtime/refreshmap.txt", 2)
-	If $hFile = -1 Then
-		Exit
-	EndIf
-	FileWrite($hFile, "")
-	FileClose($hFile)
-	If $bActiveSquadOnMapSync == True Then
-		WinActivate("Squad")
-		Sleep(200)
-	EndIf
-
-	PixelSearch($aCoordinates[$iResolution][$iIsMapActive][0], $aCoordinates[$iResolution][$iIsMapActive][1], $aCoordinates[$iResolution][$iIsMapActive][2], $aCoordinates[$iResolution][$iIsMapActive][3], "0xFFFFFF", 0, 1, $hWnd)
-	If @error Then
-		ControlSend("Squad", "", "", "{m}")
-		Sleep(300)
-	EndIf
-
-	_MouseWheelPlus("Squad", "down", 30)
-	Sleep(600)
-	Local $hHBitmap = _ScreenCapture_CaptureWnd("", "Squad", $aCoordinates[$iResolution][$iMapCoordinates][0], $aCoordinates[$iResolution][$iMapCoordinates][1], $aCoordinates[$iResolution][$iMapCoordinates][2], $aCoordinates[$iResolution][$iMapCoordinates][3], False)
-	_ScreenCapture_SaveImage("runtime/screenshot.jpg", $hHBitmap)
-	Local $sImageNames = StringSplit($sFileContent, ";", 2)
-	Run("./scripts/imageLayeringSilent runtime/screenshot.jpg frontend/public/" & $sImageNames[0] & " frontend/public/merged/" & $sImageNames[1])
-	;ConsoleWrite("./scripts/imageLayeringSilent runtime/screenshot.jpg frontend/public/" & $sImageNames[0] & " frontend/public/merged/" & $sImageNames[1] & @CRLF)
-	;ConsoleWrite("Screenshot taken" & @CRLF)
-
-EndFunc   ;==>syncMap
-
-Func setCoordinates()
-
-	;=================================================== 1024x768
-	$aCoordinates[$i1024x768][$iMortarAngleOcr][0] = 497
-	$aCoordinates[$i1024x768][$iMortarAngleOcr][1] = 779
-	$aCoordinates[$i1024x768][$iMortarAngleOcr][2] = 532
-	$aCoordinates[$i1024x768][$iMortarAngleOcr][3] = 786
-
-	$aCoordinates[$i1024x768][$iMortarRangeOcr][0] = 207
-	$aCoordinates[$i1024x768][$iMortarRangeOcr][1] = 400
-	$aCoordinates[$i1024x768][$iMortarRangeOcr][2] = 256
-	$aCoordinates[$i1024x768][$iMortarRangeOcr][3] = 430
-
-	$aCoordinates[$i1024x768][$iIsMapActive][0] = 700
-	$aCoordinates[$i1024x768][$iIsMapActive][1] = 133
-	$aCoordinates[$i1024x768][$iIsMapActive][2] = 900
-	$aCoordinates[$i1024x768][$iIsMapActive][3] = 133
-
-	$aCoordinates[$i1024x768][$iMapCoordinates][0] = 577
-	$aCoordinates[$i1024x768][$iMapCoordinates][1] = 224
-	$aCoordinates[$i1024x768][$iMapCoordinates][2] = 1017
-	$aCoordinates[$i1024x768][$iMapCoordinates][3] = 662
-
-	;=================================================== 1920x108
-	$aCoordinates[$i1920x1080][$iMortarAngleOcr][0] = 938
-	$aCoordinates[$i1920x1080][$iMortarAngleOcr][1] = 1052
-	$aCoordinates[$i1920x1080][$iMortarAngleOcr][2] = 980
-	$aCoordinates[$i1920x1080][$iMortarAngleOcr][3] = 1063
-
-	$aCoordinates[$i1920x1080][$iMortarRangeOcr][0] = 531
-	$aCoordinates[$i1920x1080][$iMortarRangeOcr][1] = 513
-	$aCoordinates[$i1920x1080][$iMortarRangeOcr][2] = 605
-	$aCoordinates[$i1920x1080][$iMortarRangeOcr][3] = 560
-
-	$aCoordinates[$i1920x1080][$iIsMapActive][0] = 1050
-	$aCoordinates[$i1920x1080][$iIsMapActive][1] = 141
-	$aCoordinates[$i1920x1080][$iIsMapActive][2] = 1500
-	$aCoordinates[$i1920x1080][$iIsMapActive][3] = 141
-
-	$aCoordinates[$i1920x1080][$iMapCoordinates][0] = 1086
-	$aCoordinates[$i1920x1080][$iMapCoordinates][1] = 195
-	$aCoordinates[$i1920x1080][$iMapCoordinates][2] = 1855
-	$aCoordinates[$i1920x1080][$iMapCoordinates][3] = 964
-
-	;=================================================== 2560x1440
-	$aCoordinates[$i2560x1440][$iMortarAngleOcr][0] = 1250
-	$aCoordinates[$i2560x1440][$iMortarAngleOcr][1] = 1403
-	$aCoordinates[$i2560x1440][$iMortarAngleOcr][2] = 1305
-	$aCoordinates[$i2560x1440][$iMortarAngleOcr][3] = 1417
-
-	$aCoordinates[$i2560x1440][$iMortarRangeOcr][0] = 695
-	$aCoordinates[$i2560x1440][$iMortarRangeOcr][1] = 688
-	$aCoordinates[$i2560x1440][$iMortarRangeOcr][2] = 798
-	$aCoordinates[$i2560x1440][$iMortarRangeOcr][3] = 750
-
-	$aCoordinates[$i2560x1440][$iIsMapActive][0] = 1900
-	$aCoordinates[$i2560x1440][$iIsMapActive][1] = 190
-	$aCoordinates[$i2560x1440][$iIsMapActive][2] = 2200
-	$aCoordinates[$i2560x1440][$iIsMapActive][3] = 190
-
-	$aCoordinates[$i2560x1440][$iMapCoordinates][0] = 1477
-	$aCoordinates[$i2560x1440][$iMapCoordinates][1] = 260
-	$aCoordinates[$i2560x1440][$iMapCoordinates][2] = 2473
-	$aCoordinates[$i2560x1440][$iMapCoordinates][3] = 1286
-
-EndFunc   ;==>setCoordinates

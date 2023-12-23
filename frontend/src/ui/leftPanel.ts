@@ -395,11 +395,18 @@ const extraButtons = (props:{userSettings: UserSettings, uiState: UIState} & any
   div({ className: "v2" }, []),
   div({ className: "flexRow", }, [
     div({
-      style: { "width": "100%" },
+      style: { "width": "32%" },
       className: "divButton ",
       title: "Sync Map",
-      onClick: () =>  props.onClickSyncMap(props.state)
+      onClick: () =>  props.onClickSyncMap(props.state,false)
     }, "Sync Map"),
+    div({ className: "h2" }),
+    div({
+     // style: { "width": "49%" },
+      className: "divButton ",
+      title: "Sync Map Active Squad",
+      onClick: () =>  props.onClickSyncMap(props.state,true)
+    }, "Sync Map Active Squad"),
   ]),
 
 ]
@@ -438,7 +445,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   onChangeWeaponHeightOverGround: (entityId: EntityId) => (e: any) => dispatch(setWeaponHeightOverGroundMeters(entityId, parseInt(e.target.value))), //dispatch(writeUserSettings("extraWeaponHeight", parseInt(e.target.value))),
   onClickRemoveAllTargets: (e: any) => dispatch(removeAllTargets()),
   onClickSync: (e: any) => dispatch(syncTargets(e)),
-  onClickSyncMap: (e: any) => dispatch(syncMap(e)),
+  onClickSyncMap: (e: any, active: boolean) => dispatch(syncMap(e,active)),
   onChangeDeleteMode: (e: any) => dispatch(writeUserSettings("deleteMode", e.target.value)),
   onChangeExtraButtons: (e: any) => dispatch(writeUserSettings("extraButtonsAlwaysShown", e.target.value)),
   onChangeWeaponCreationMode: (e: any) => dispatch(writeUIState("weaponCreationMode", e.target.value)),

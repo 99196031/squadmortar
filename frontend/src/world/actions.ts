@@ -46,10 +46,10 @@ export const syncTargets: (state: any) => EntityAction =
 })
 
 
-export const syncMap: (state: any) => EntityAction = 
-  (state) => ({
+export const syncMap: (state: any, active : boolean) => EntityAction = 
+  (state, active) => ({
     type: EntityActionType.syncMap,
-    payload: {state}
+    payload: {state , active}
 })
 
 export const removeAllTargets: () => EntityAction = 

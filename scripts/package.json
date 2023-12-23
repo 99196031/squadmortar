@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "scripts": {
+    "build": "pkg squadMortarServer.js -t=win && create-nodew-exe squadMortarServer.exe squadMortarServerSilent.exe"
   }
 }

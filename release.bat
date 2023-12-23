@@ -16,7 +16,7 @@ xcopy /s /e /i scripts release\scripts
 for %%f in (release\scripts\*) do (
     if /I "%%~nxf" neq "squadMortarServerSilent.exe" (
         if /I "%%~nxf" neq "imageLayeringSilent.exe" (
-            if /I "%%~nxf" neq "squadMortarServerWebsiteSilent.exe" (
+            if /I "%%~nxf" neq "syncMap.exe" (
                 del "%%f"
             )
         )
