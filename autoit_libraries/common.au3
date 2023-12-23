@@ -109,9 +109,9 @@ Func setCoordinates()
 		Global $iResolution = Eval("i" & $aWinPos[0] & "x" & $aWinPos[1])
 	EndIf
 	;=================================================== 1024x768
-	$aCoordinates[$i1024x768][$iMortarAngleOcr][0] = 497
+	$aCoordinates[$i1024x768][$iMortarAngleOcr][0] = 496
 	$aCoordinates[$i1024x768][$iMortarAngleOcr][1] = 779
-	$aCoordinates[$i1024x768][$iMortarAngleOcr][2] = 532
+	$aCoordinates[$i1024x768][$iMortarAngleOcr][2] = 527
 	$aCoordinates[$i1024x768][$iMortarAngleOcr][3] = 786
 
 	$aCoordinates[$i1024x768][$iMortarRangeOcr][0] = 207
