@@ -15,7 +15,7 @@ Func createGUI()
 	GUICtrlSetColor($iLog, 0xF7FF01)
 	loadDataLog($iLog)
 
-	Local $buttonWidth = ($hGUIWidth - 30) / 2
+	Local $buttonWidth = ($hGUIWidth - 45) / 3
 	Local $buttonHeight = 30
 
 	GUICtrlCreateButton("Open SquadMortar Site", 10, $hGUIHeight - 100, $hGUIWidth - 25, $buttonHeight)
@@ -24,8 +24,11 @@ Func createGUI()
 	GUICtrlCreateButton("Discord", 10, $hGUIHeight - 65, $buttonWidth, $buttonHeight)
 	GUICtrlSetOnEvent(-1, "eventButtonDiscordClick")
 
-	GUICtrlCreateButton("Github", 15 + $buttonWidth, $hGUIHeight - 65, $buttonWidth, $buttonHeight)
+	GUICtrlCreateButton("Github", 20 + $buttonWidth, $hGUIHeight - 65, $buttonWidth, $buttonHeight)
 	GUICtrlSetOnEvent(-1, "eventButtonGithubClick")
+
+	GUICtrlCreateButton("Check Update", 30 + $buttonWidth * 2, $hGUIHeight - 65, $buttonWidth, $buttonHeight)
+	GUICtrlSetOnEvent(-1, "eventButtonUpdateClick")
 
 	GUISetState(@SW_SHOW)
 EndFunc   ;==>createGUI
@@ -66,7 +69,7 @@ Func loadDataLog($iLogData)
 		If Not @error Then
 			customConsole($iLogData, "Size of game is correct :" & $aWinPos[0] & "x" & $aWinPos[1] & ".")
 		Else
-			customConsole($iLogData, "Size of game is incorrect correct: 1024x768, 1920x1080, 2560x1440, 3480x1600")
+			customConsole($iLogData, "Size of game is incorrect correct: 1024x768, 1920x1080, 2560x1440, 3840x1600")
 			customConsole($iLogData, "Your size is: " & $aWinPos[0] & "x" & $aWinPos[1] & ".")
 			customConsole($iLogData, "Restart Auto SquadMortar once the issue is resolved.")
 			customConsole($iLogData, "Usual Causes: Setting -> Display -> Scale & Layout put on 100% to fix ")
@@ -81,12 +84,12 @@ Func loadDataLog($iLogData)
 	customConsole($iLogData, "  • CONTROLS -> INFANTRY -> AIM DOWN SIGHTS -> ALTERNATIVE = O")
 	customConsole($iLogData, "")
 	customConsole($iLogData, "If you intend to use sync targets and sync map:") ;
-	customConsole($iLogData, "  • If you have only one monitor, play at 1024x768 in windowed mode.") 
-	customConsole($iLogData, "  • If you have two or more monitors, play at all other resolutions in fullscreen or borderless mode.") 
+	customConsole($iLogData, "  • If you have only one monitor, play at 1024x768 in windowed mode.")
+	customConsole($iLogData, "  • If you have two or more monitors, play at all other resolutions in fullscreen or borderless mode.")
 	customConsole($iLogData, "")
-	customConsole($iLogData, "If you wish to use only sync map:") 
-	customConsole($iLogData, "  • Play all supported resolutions, with 1024x768 in windowed mode and all other resolutions in fullscreen or borderless mode.") 
-	customConsole($iLogData, "  • If you have only one monitor, use the sync map active squad.") 
+	customConsole($iLogData, "If you wish to use only sync map:")
+	customConsole($iLogData, "  • Play all supported resolutions, with 1024x768 in windowed mode and all other resolutions in fullscreen or borderless mode.")
+	customConsole($iLogData, "  • If you have only one monitor, use the sync map active squad.")
 	customConsole($iLogData, "")
 	customConsole($iLogData, "Notes:")
 	customConsole($iLogData, "  • Squad MUST be visible (It can't be covered).")
@@ -98,6 +101,10 @@ Func loadDataLog($iLogData)
 	customConsole($iLogData, "  • Tab -> Right site of screen -> Grid Opacity 0", True)
 EndFunc   ;==>loadDataLog
 
+Func eventButtonUpdateClick()
+	Run("scripts/update.bat")
+	exitScript()
+EndFunc   ;==>eventButtonUpdateClick
 
 Func eventButtonGithubClick()
 	ShellExecute("https://github.com/Devil4ngle/squadmortar/releases")

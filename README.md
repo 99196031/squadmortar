@@ -37,7 +37,7 @@ Feel free to join our Discord community for discussions, support, and updates: [
 No, the usage of SquadAutoMortars does not violate Easy Anti-Cheat (EAC) policies. The program operates without attaching to or reading memory from the Squad game process. It solely captures screenshots using standard operating system APIs and sends keyboard inputs (a, w, s, d). The code is open source, providing transparency and assurance.
 
 ## Supported Sizes
-1024x768, 1920x1080, 2560x1440, 3480x1600
+1024x768, 1920x1080, 2560x1440, 3840x1600
 
 ## Unsupported Screen Size
 If your screen size is not supported, please join our Discord community for assistance: [SquadAutoMortars Discord](https://discord.gg/Qc5y4satdz).

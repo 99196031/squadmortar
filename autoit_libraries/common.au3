@@ -2,11 +2,12 @@
 Const $i1024x768 = 0
 Const $i1920x1080 = 1
 Const $i2560x1440 = 2
+Const $i3840x1600 = 3
 Const $iMortarAngleOcr = 0
 Const $iMortarRangeOcr = 1
 Const $iIsMapActive = 2
 Const $iMapCoordinates = 3
-Global $aCoordinates[3][4][4]
+Global $aCoordinates[4][4][4]
 
 
 Func arrayCompare(Const ByRef $aArray1, Const ByRef $aArray2)
@@ -171,25 +172,25 @@ Func setCoordinates()
 	$aCoordinates[$i2560x1440][$iMapCoordinates][2] = 2474
 	$aCoordinates[$i2560x1440][$iMapCoordinates][3] = 1286
 
-	;=================================================== 3480x1600
-	$aCoordinates[$i2560x1440][$iMortarAngleOcr][0] = 1886
-	$aCoordinates[$i2560x1440][$iMortarAngleOcr][1] = 1559
-	$aCoordinates[$i2560x1440][$iMortarAngleOcr][2] = 1953
-	$aCoordinates[$i2560x1440][$iMortarAngleOcr][3] = 1575
+	;=================================================== 3840x1600
+	$aCoordinates[$i3840x1600][$iMortarAngleOcr][0] = 1886
+	$aCoordinates[$i3840x1600][$iMortarAngleOcr][1] = 1559
+	$aCoordinates[$i3840x1600][$iMortarAngleOcr][2] = 1953
+	$aCoordinates[$i3840x1600][$iMortarAngleOcr][3] = 1575
 
-	$aCoordinates[$i2560x1440][$iMortarRangeOcr][0] = 1260
-	$aCoordinates[$i2560x1440][$iMortarRangeOcr][1] = 765
-	$aCoordinates[$i2560x1440][$iMortarRangeOcr][2] = 1380
-	$aCoordinates[$i2560x1440][$iMortarRangeOcr][3] = 847
+	$aCoordinates[$i3840x1600][$iMortarRangeOcr][0] = 1260
+	$aCoordinates[$i3840x1600][$iMortarRangeOcr][1] = 765
+	$aCoordinates[$i3840x1600][$iMortarRangeOcr][2] = 1380
+	$aCoordinates[$i3840x1600][$iMortarRangeOcr][3] = 847
 
-	$aCoordinates[$i2560x1440][$iIsMapActive][0] = 2560
-	$aCoordinates[$i2560x1440][$iIsMapActive][1] = 210
-	$aCoordinates[$i2560x1440][$iIsMapActive][2] = 3000
-	$aCoordinates[$i2560x1440][$iIsMapActive][3] = 210
+	$aCoordinates[$i3840x1600][$iIsMapActive][0] = 2560
+	$aCoordinates[$i3840x1600][$iIsMapActive][1] = 210
+	$aCoordinates[$i3840x1600][$iIsMapActive][2] = 3000
+	$aCoordinates[$i3840x1600][$iIsMapActive][3] = 210
 
-	$aCoordinates[$i2560x1440][$iMapCoordinates][0] = 2356
-	$aCoordinates[$i2560x1440][$iMapCoordinates][1] = 289
-	$aCoordinates[$i2560x1440][$iMapCoordinates][2] = 3495
-	$aCoordinates[$i2560x1440][$iMapCoordinates][3] = 1429
+	$aCoordinates[$i3840x1600][$iMapCoordinates][0] = 2356
+	$aCoordinates[$i3840x1600][$iMapCoordinates][1] = 289
+	$aCoordinates[$i3840x1600][$iMapCoordinates][2] = 3495
+	$aCoordinates[$i3840x1600][$iMapCoordinates][3] = 1429
 
 EndFunc   ;==>setCoordinates
