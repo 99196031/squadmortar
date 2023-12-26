@@ -6,7 +6,7 @@
 Func createGUI()
 	Local $hGUIWidth = 560
 	Local $hGUIHeight = 300
-	$hGUI = GUICreate("Auto SquadMortar 1.8", $hGUIWidth, $hGUIHeight, -1, -1, $WS_SYSMENU + $WS_MINIMIZEBOX)
+	$hGUI = GUICreate("Auto SquadMortar 1.8.1", $hGUIWidth, $hGUIHeight, -1, -1, $WS_SYSMENU + $WS_MINIMIZEBOX)
 	GUISetOnEvent($GUI_EVENT_CLOSE, "exitScript")
 	GUISetBkColor(0x202225)
 	$iLog = GUICtrlCreateEdit("", 10, 10, $hGUIWidth - 25, $hGUIHeight - 115, BitOR($ES_AUTOVSCROLL, $ES_AUTOHSCROLL, $ES_WANTRETURN, $WS_VSCROLL, $ES_READONLY))
@@ -85,10 +85,12 @@ Func loadDataLog($iLogData)
 	customConsole($iLogData, "")
 	customConsole($iLogData, "If you intend to use sync targets and sync map:") ;
 	customConsole($iLogData, "  • If you have only one monitor, play at 1024x768 in windowed mode.")
-	customConsole($iLogData, "  • If you have two or more monitors, play at all other resolutions in fullscreen or borderless mode.")
+	customConsole($iLogData, "  • If you have two or more monitors, play at all other resolutions in fullscreen or")
+	customConsole($iLogData, "    borderless mode.")
 	customConsole($iLogData, "")
 	customConsole($iLogData, "If you wish to use only sync map:")
-	customConsole($iLogData, "  • Play all supported resolutions, with 1024x768 in windowed mode and all other resolutions in fullscreen or borderless mode.")
+	customConsole($iLogData, "  • Play all supported resolutions, with 1024x768 in windowed mode and all other resolutions")
+	customConsole($iLogData, "    in fullscreen or borderless mode.")
 	customConsole($iLogData, "  • If you have only one monitor, use the sync map active squad.")
 	customConsole($iLogData, "")
 	customConsole($iLogData, "Notes:")

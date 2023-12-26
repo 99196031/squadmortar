@@ -1,6 +1,14 @@
 @echo off
 setlocal
+
+del squadMortarServer.exe
+del squadMortarServerSilent.exe
+call npm run build
 cd .. 
+
+cd frontend
+call npm run buildOnce 
+cd ..
 if exist release rmdir /s /q release
 
 :: Create the 'release' folder
