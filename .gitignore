@@ -10,6 +10,7 @@ frontend/public/merged/
 scripts/node_modules/
 scripts/*.exe
 scripts/*.spec
+scripts/git
 scripts/build
 scripts/dist
 runtime/

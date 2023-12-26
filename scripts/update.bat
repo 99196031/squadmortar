@@ -1,3 +1,6 @@
 @echo off
-timeout /t 3 /nobreak > nul
-/scripts/git.exe fetch https://github.com/Devil4ngle/squadmortar.git release --quiet
+timeout /t 1 /nobreak 
+echo Fetching from Git...
+"%CD%\scripts\git\bin\git.exe" reset origin/release --hard
+echo Script is up to date. Press any key to close.
+pause

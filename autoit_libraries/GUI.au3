@@ -6,7 +6,7 @@
 Func createGUI()
 	Local $hGUIWidth = 560
 	Local $hGUIHeight = 300
-	$hGUI = GUICreate("Auto SquadMortar 1.7", $hGUIWidth, $hGUIHeight, -1, -1, $WS_SYSMENU + $WS_MINIMIZEBOX)
+	$hGUI = GUICreate("Auto SquadMortar 1.8", $hGUIWidth, $hGUIHeight, -1, -1, $WS_SYSMENU + $WS_MINIMIZEBOX)
 	GUISetOnEvent($GUI_EVENT_CLOSE, "exitScript")
 	GUISetBkColor(0x202225)
 	$iLog = GUICtrlCreateEdit("", 10, 10, $hGUIWidth - 25, $hGUIHeight - 115, BitOR($ES_AUTOVSCROLL, $ES_AUTOHSCROLL, $ES_WANTRETURN, $WS_VSCROLL, $ES_READONLY))
@@ -102,7 +102,7 @@ Func loadDataLog($iLogData)
 EndFunc   ;==>loadDataLog
 
 Func eventButtonUpdateClick()
-	Run("scripts/update.bat")
+	ShellExecute("scripts\update.bat")
 	exitScript()
 EndFunc   ;==>eventButtonUpdateClick
 

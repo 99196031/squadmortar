@@ -1,3 +1,6 @@
+#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
+#AutoIt3Wrapper_UseX64=y
+#EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 #include <ScreenCapture.au3>
 #include "../autoit_libraries/common.au3"
 

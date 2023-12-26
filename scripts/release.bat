@@ -1,10 +1,12 @@
 @echo off
 setlocal
-
+cd .. 
 if exist release rmdir /s /q release
 
 :: Create the 'release' folder
 mkdir release
+
+git clone --no-checkout  -b release https://github.com/Devil4ngle/squadmortar.git release
 
 :: Copy squadmortar.exe to the 'release' folder
 copy squadmortar.exe release
@@ -16,7 +18,7 @@ mkdir release\scripts
 copy /y scripts\squadMortarServerSilent.exe release\scripts
 copy /y scripts\imageLayeringSilent.exe release\scripts
 copy /y scripts\syncMap.exe release\scripts
-copy /y scripts\git.exe release\scripts
+xcopy /I /s /y scripts\git release\scripts\git
 copy /y scripts\update.bat release\scripts
 
 if exist release\scripts\node_modules rmdir /s /q release\scripts\node_modules
@@ -38,8 +40,6 @@ if exist release\frontend\public\merged rmdir /s /q release\frontend\public\merg
 :: Initialize a new Git repository in the 'release' folder
 cd release
 :: Add all your changes
-
-git clone https://github.com/Devil4ngle/squadmortar.git -b release --no-checkout 
 
 git add .
 
