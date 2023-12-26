@@ -49,6 +49,9 @@ if exist release\frontend\public\merged rmdir /s /q release\frontend\public\merg
 cd release
 :: Add all your changes
 
+echo runtime/ > .gitignore
+echo frontend/public/merged/ >> .gitignore
+
 git add .
 
 git commit -m "Update Release"
