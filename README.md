@@ -1,6 +1,8 @@
 # SquadAutoMortars
 [![Watch the video](https://img.youtube.com/vi/uF3VQAWmt88/hqdefault.jpg)](https://www.youtube.com/watch?v=uF3VQAWmt88)
 
+<a href="https://github.com/Devil4ngle/squadmortar/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/Naereen/StrapDown.js.svg" alt="LICENSE"></a>
+
 ## Overview
 SquadAutoMortars is a tool designed to enhance your gaming experience in Squad by automating mortar control and providing a synchronized map overlay. This tool is created with the goal of improving mortar adjustments and map coordination.
 
