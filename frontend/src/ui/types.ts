@@ -31,6 +31,7 @@ export type UserSettings = {
 
     extraButtonsAlwaysShown: boolean;
     deleteMode: boolean;
+    alwaysSyncMap: boolean;
 
     leftPanelCollapsed: boolean;
 }

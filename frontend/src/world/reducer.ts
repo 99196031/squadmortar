@@ -12,6 +12,7 @@ import { getHeight } from "../heightmap/heightmap";
 import { getMortarFiringSolution } from "./projectilePhysics";
 import { getTranslation } from "./transformations";
 import { US_MIL } from "./constants";
+import { loadUserSettings } from "../ui/persistence";
 
 
 const newWorld = (): World => ({
@@ -65,25 +66,44 @@ export const world: Reducer<World, StoreAction> = (state, action) => {
 
     case EntityActionType.syncMap:
       return produce(state, (proxy: World) => {
-        const cacheBuster = new Date().getTime();
-        const startTime = Date.now();
-        const performanceStart = performance.now();
-        const tryFetchImage = () => {
+        const state = action.payload.state;
+        const tryFetchImage = (cacheBuster: any, performanceStart: any) => {
           fetch(`merged/merged_${cacheBuster}.jpg`, {
             method: 'GET',
             mode: 'no-cors',
           })
             .then((response) => {
               if (response.ok) {
-                action.payload.state.minimap.texture.image.src = `merged/merged_${cacheBuster}.jpg`, 5000
+                state.minimap.texture.image.src = `merged/merged_${cacheBuster}.jpg`, 5000
                 const endTime = performance.now();
                 const elapsedTime = endTime - performanceStart;
-                console.log(`Elapsed time: ${elapsedTime} milliseconds`);
+                console.log(`Elapsed time: ${elapsedTime} milliseconds`)
+                const userSettings = loadUserSettings();
+                const alwaysSyncMapValue = userSettings.alwaysSyncMap;
+                if (action.payload.isToggle) {
+                  if (alwaysSyncMapValue) {
+                    const cacheBuster = new Date().getTime();
+                    const performanceStart = performance.now();
+                    fetch("http://localhost:3000/refreshmap/", {
+                      method: 'POST',
+                      mode: "no-cors",
+                      headers: {
+                        'Content-Type': 'text/plain'
+                      },
+                      body: state.minimap.texture.source + ";merged_" + cacheBuster + ".jpg" + ";" + (action.payload.active ? 1 : 0)
+                    }).then((response) => {
+                      tryFetchImage(cacheBuster, performanceStart);
+                    });
+                  }
+                }
               } else {
-                action.payload.state.minimap.texture.image.src = action.payload.state.minimap.texture.source;
+                state.minimap.texture.image.src = state.minimap.texture.source;
               }
             })
         };
+        const cacheBuster = new Date().getTime();
+        const performanceStart = performance.now();
+        document.body.style.cursor = 'default';
 
         fetch("http://localhost:3000/refreshmap/", {
           method: 'POST',
@@ -93,7 +113,9 @@ export const world: Reducer<World, StoreAction> = (state, action) => {
           },
           body: action.payload.state.minimap.texture.source + ";merged_" + cacheBuster + ".jpg" + ";" + (action.payload.active ? 1 : 0)
         }).then((response) => {
-          tryFetchImage();
+          document.body.style.cursor = 'default';
+
+          tryFetchImage(cacheBuster, performanceStart);
         });
       });
 

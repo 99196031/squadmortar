@@ -23,6 +23,7 @@ const defaultUserSettings = (): UserSettings => ({
 
     extraButtonsAlwaysShown: false,
     deleteMode: false,
+    alwaysSyncMap: false,
 
     targetCompactMode: false,
     leftPanelCollapsed: false,

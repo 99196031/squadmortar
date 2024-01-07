@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Provider, connect  } from 'react-redux'
-import { changeMap, newUIStateWriteAction as writeUIState, newUserSettingsWriteAction as writeUserSettings} from './actions';
+import { Provider, connect } from 'react-redux'
+import { changeMap, newUIStateWriteAction as writeUIState, newUserSettingsWriteAction as writeUserSettings } from './actions';
 import { toggleButton, unstyledToggleButton } from '../common/toggleButton';
 import { Dropdown } from "../common/dropdown";
 import { UIState, UserSettings } from "./types";
@@ -57,71 +57,73 @@ const weaponOptions = [
   ["bm21", "BM-21 Grad", "options/s5rocket2.png"],
 ]
 
-const mapOption: (label: string, imagePath: string) => any = 
-  (label, imagePath) => div({className: "flexRow mapOption"},[
-    div({className: "mapOptionImage", style: {backgroundImage: `url(${imagePath})`}}),
-    div({className: "mapOptionLabel"}, label)
+const mapOption: (label: string, imagePath: string) => any =
+  (label, imagePath) => div({ className: "flexRow mapOption" }, [
+    div({ className: "mapOptionImage", style: { backgroundImage: `url(${imagePath})` } }),
+    div({ className: "mapOptionLabel" }, label)
   ])
 
-const weaponOption: (label: string, imagePath: string) => any = 
-  (label, imagePath) => div({className: "flexRow mapOption", key: label},[
-    div({className: "weaponOptionImage", style: {backgroundImage: `url(${imagePath})`}}),
-    div({className: "weaponOptionLabel"}, label)
+const weaponOption: (label: string, imagePath: string) => any =
+  (label, imagePath) => div({ className: "flexRow mapOption", key: label }, [
+    div({ className: "weaponOptionImage", style: { backgroundImage: `url(${imagePath})` } }),
+    div({ className: "weaponOptionLabel" }, label)
   ])
 
-const leftPanel: (props:{userSettings: UserSettings} & any) => any  
+const leftPanel: (props: { userSettings: UserSettings } & any) => any
   = props => {
-  return h("div", {className: "leftPanel flexItem"}, [
-    props.userSettings.leftPanelCollapsed 
-      ? div({className: "flexColumn", style:{"padding": "2px"}},[ 
-          div({className: "flexRow"}, [
-          h(Dropdown, {className: "flexItem fill", 
-            value: props.userSettings.mapId, 
-            onChange: props.onChangeMap, 
-            options: mapOptions.map(valueLabel => ({value: valueLabel[0], elem: mapOption(valueLabel[1], valueLabel[2])}))
-          }),
-        ]),
-        props.userSettings.extraButtonsAlwaysShown 
-          ? h(React.Fragment, {}, [
-            div({className: "v2"}, []),
-            ...extraButtons(props),
-          ]) 
-          : null,
-      ]) 
-      : div({style: {padding: "2px"}}, collapsibleleftPanelSettings(props)),
-    
-    unstyledToggleButton({
-      value: props.userSettings.leftPanelCollapsed, 
-      onChange: props.setCollapsed,
-      label: "",
-      className: "collapseButton", 
-      style: {},
-    }),
-  ])
-}
+    return h("div", { className: "leftPanel flexItem" }, [
+      props.userSettings.leftPanelCollapsed
+        ? div({ className: "flexColumn", style: { "padding": "2px" } }, [
+          div({ className: "flexRow" }, [
+            h(Dropdown, {
+              className: "flexItem fill",
+              value: props.userSettings.mapId,
+              onChange: props.onChangeMap,
+              options: mapOptions.map(valueLabel => ({ value: valueLabel[0], elem: mapOption(valueLabel[1], valueLabel[2]) }))
+            }),
+          ]),
+          props.userSettings.extraButtonsAlwaysShown
+            ? h(React.Fragment, {}, [
+              div({ className: "v2" }, []),
+              ...extraButtons(props),
+            ])
+            : null,
+        ])
+        : div({ style: { padding: "2px" } }, collapsibleleftPanelSettings(props)),
 
-const collapsibleleftPanelSettings: (props:{userSettings: UserSettings} & any) => any  = 
+      unstyledToggleButton({
+        value: props.userSettings.leftPanelCollapsed,
+        onChange: props.setCollapsed,
+        label: "",
+        className: "collapseButton",
+        style: {},
+      }),
+    ])
+  }
+
+const collapsibleleftPanelSettings: (props: { userSettings: UserSettings } & any) => any =
   props => {
-    return [ 
-      div({className: "flexColumn"},[
-        div({className: "flexRow", }, [
-          h(Dropdown, {className: "flexItem fill", 
-            value: props.userSettings.mapId, 
-            onChange: props.onChangeMap, 
-            options: mapOptions.map(valueLabel => ({value: valueLabel[0], elem: mapOption(valueLabel[1], valueLabel[2])}))
+    return [
+      div({ className: "flexColumn" }, [
+        div({ className: "flexRow", }, [
+          h(Dropdown, {
+            className: "flexItem fill",
+            value: props.userSettings.mapId,
+            onChange: props.onChangeMap,
+            options: mapOptions.map(valueLabel => ({ value: valueLabel[0], elem: mapOption(valueLabel[1], valueLabel[2]) }))
           })
         ]),
-        div({className: "v2"}, []),
-        div({className: "flexRow"}, [
+        div({ className: "v2" }, []),
+        div({ className: "flexRow" }, [
           toggleButton({
-              value: props.userSettings.mapGrid, 
-              onChange: props.onChangeMapGrid,
-              label: "#",
-              classNameTrue: "toggleButton black", 
-              classNameFalse: "toggleButton", 
-              styleFalse: {color: "grey"},
-              tooltip: "Show map grid",
-            }
+            value: props.userSettings.mapGrid,
+            onChange: props.onChangeMapGrid,
+            label: "#",
+            classNameTrue: "toggleButton black",
+            classNameFalse: "toggleButton",
+            styleFalse: { color: "grey" },
+            tooltip: "Show map grid",
+          }
           ),
           //div({className:"h2"}),
           //toggleButton({
@@ -134,23 +136,23 @@ const collapsibleleftPanelSettings: (props:{userSettings: UserSettings} & any) =
           //  tooltip: "Show contour map layer",
           //}),
         ]),
-        div({className: "flexRow"}, [
-          div({className: "separator"})
+        div({ className: "flexRow" }, [
+          div({ className: "separator" })
         ]),
         ...weaponSettings(props),
-        div({className: "flexRow"}, [
-          div({className: "separator"})
+        div({ className: "flexRow" }, [
+          div({ className: "separator" })
         ]),
 
         ...targetSettings(props),
-        div({className: "v2"}, []),
-        
-        div({className: "flexRow"}, [
-          div({className: "separator"})
+        div({ className: "v2" }, []),
+
+        div({ className: "flexRow" }, [
+          div({ className: "separator" })
         ]),
         ...extraButtons(props),
-        div({className: "flexRow"}, [
-          div({className: "separator"})
+        div({ className: "flexRow" }, [
+          div({ className: "separator" })
         ]),
         //sessionComponent(props),
         //div({className: "flexRow"}, [
@@ -162,50 +164,51 @@ const collapsibleleftPanelSettings: (props:{userSettings: UserSettings} & any) =
     ]
   }
 
-const weaponSettings = (props:{userSettings: UserSettings} & any) => [
-  div({className: "flexRow", }, [
-    h(Dropdown, {className: "flexItemFill", 
-      value: props.userSettings.weaponType, 
-      onChange: props.onChangeWeapon, 
-      options: weaponOptions.map(valueLabel => ({value: valueLabel[0], elem: weaponOption(valueLabel[1], valueLabel[2])}))
+const weaponSettings = (props: { userSettings: UserSettings } & any) => [
+  div({ className: "flexRow", }, [
+    h(Dropdown, {
+      className: "flexItemFill",
+      value: props.userSettings.weaponType,
+      onChange: props.onChangeWeapon,
+      options: weaponOptions.map(valueLabel => ({ value: valueLabel[0], elem: weaponOption(valueLabel[1], valueLabel[2]) }))
     })
   ]),
-  div({className: "v2"}, []),
-  div({className: "flexRow"}, [
+  div({ className: "v2" }, []),
+  div({ className: "flexRow" }, [
     toggleButton({
-      value: props.userSettings.weaponPlacementHelper, 
+      value: props.userSettings.weaponPlacementHelper,
       onChange: props.onChangeWeaponPlacementHelper,
       tooltip: "Show keypads while moving weapon",
       label: "#?",
-      className: "", 
+      className: "",
       classNameTrue: " green",
-      styleFalse: {color: "grey"},
+      styleFalse: { color: "grey" },
     }),
-    div({className: "h2"}, []),
+    div({ className: "h2" }, []),
     toggleButton({
-      value: props.userSettings.weaponPlacementLabel, 
+      value: props.userSettings.weaponPlacementLabel,
       onChange: props.onChangeWeaponPlacementLabel,
       tooltip: "Show keypad label while moving weapon",
       label: "A1",
-      className: "", 
+      className: "",
       classNameTrue: " green",
-      styleFalse: {color: "grey"},
+      styleFalse: { color: "grey" },
     }),
   ]),
   weaponTable(props)
 ]
 
-const weaponTable = (props: {world: World, minimap: Minimap} & any) => {
+const weaponTable = (props: { world: World, minimap: Minimap } & any) => {
   let weapons = getEntitiesByType<Weapon>(props.world, "Weapon");
   canonicalEntitySort(weapons);
-  return div({className: "flexRow", }, [
-    h("table", {className: "weaponTable" }, [
-      h("colgroup", {}, [ 
-        h("col", {className: "indexCol"}),
-        h("col", {className: "locationCol"}),
-        h("col", {className: ""}),
-        h("col", {className: ""}),
-        h("col", {className: ""}),
+  return div({ className: "flexRow", }, [
+    h("table", { className: "weaponTable" }, [
+      h("colgroup", {}, [
+        h("col", { className: "indexCol" }),
+        h("col", { className: "locationCol" }),
+        h("col", { className: "" }),
+        h("col", { className: "" }),
+        h("col", { className: "" }),
       ]),
       h("thead", {}, [
         h("tr", {}, [
@@ -217,15 +220,15 @@ const weaponTable = (props: {world: World, minimap: Minimap} & any) => {
         ]),
       ]),
       h("tbody", {}, [
-        ...weapons.map((weapon: Weapon, index:number) => 
-          h("tr", {key: index}, [
-            h("td", {className: "indexCell"}, [(index + 1).toString()]),
+        ...weapons.map((weapon: Weapon, index: number) =>
+          h("tr", { key: index }, [
+            h("td", { className: "indexCell" }, [(index + 1).toString()]),
             h("td", {}, [standardFormatKeypad(world2keypadStrings(props.minimap, mat4.getTranslation(vec3.create(), weapon.transform)))]),
             h("td", {}, [
               h("input", {
-                type: "number", 
-                className: "textInput numberInput", 
-                value: Math.floor(weapon.heightOverGround / 100), 
+                type: "number",
+                className: "textInput numberInput",
+                value: Math.floor(weapon.heightOverGround / 100),
                 onChange: props.onChangeWeaponHeightOverGround(weapon.entityId),
                 title: "weapon height over ground (tall buildings, bridges, ...)",
               }),
@@ -239,14 +242,14 @@ const weaponTable = (props: {world: World, minimap: Minimap} & any) => {
             ]),
             h("td", {}, [
               toggleButton({
-                value: weapon.isActive, 
+                value: weapon.isActive,
                 onChange: () => props.setWeaponActive(weapon.entityId, !weapon.isActive),
                 tooltip: "activate/deactivate this weapon",
                 label: "o",
-                className: "", 
+                className: "",
                 classNameTrue: " green",
-                styleFalse: {color: "grey"},
-                })
+                styleFalse: { color: "grey" },
+              })
             ]),
           ])
         )
@@ -255,129 +258,129 @@ const weaponTable = (props: {world: World, minimap: Minimap} & any) => {
   ])
 }
 
-const targetSettings = (props:{userSettings: UserSettings} & any) => [
-  div({className: "flexRow"}, [
+const targetSettings = (props: { userSettings: UserSettings } & any) => [
+  div({ className: "flexRow" }, [
     toggleButton({
-      value: props.userSettings.targetGrid, 
+      value: props.userSettings.targetGrid,
       onChange: props.onChangeTargetGrid,
       tooltip: "Targeting grid: 5mil elevation arcs, 1° bearing lines",
       label: "#",
-      className: "", 
+      className: "",
       classNameTrue: " green",
-      styleFalse: {color: "grey"},
+      styleFalse: { color: "grey" },
     }),
-    div({className:"h2"}),
+    div({ className: "h2" }),
     toggleButton({
-      value: props.userSettings.targetSpread, 
+      value: props.userSettings.targetSpread,
       onChange: props.onChangeTargetSpread,
       tooltip: "Projectile spread",
       label: "O",
-      className: "", 
+      className: "",
       classNameTrue: " blue",
-      styleFalse: {color: "grey"},
+      styleFalse: { color: "grey" },
 
     }),
-    div({className:"h2"}),
+    div({ className: "h2" }),
     toggleButton({
-      value: props.userSettings.targetSplash, 
+      value: props.userSettings.targetSplash,
       onChange: props.onChangeTargetSplash,
       tooltip: "Splash radius for 100 and 25 damage",
       label: "(O)",
-      className: "", 
+      className: "",
       classNameTrue: " red",
-      styleFalse: {color: "grey"},
+      styleFalse: { color: "grey" },
     }),
-    div({className:"h2"}),
+    div({ className: "h2" }),
     toggleButton({
-      value: props.userSettings.targetDistance, 
+      value: props.userSettings.targetDistance,
       onChange: props.onChangeTargetDistance,
       tooltip: "Weapon-target distance",
       label: "m",
-      className: "", 
+      className: "",
       classNameTrue: " black",
-      styleFalse: {color: "grey"},
+      styleFalse: { color: "grey" },
     }),
   ]),
-  div({className: "v2"}, []),
-  div({className: "flexRow"}, [
+  div({ className: "v2" }, []),
+  div({ className: "flexRow" }, [
     toggleButton({
-      value: props.userSettings.targetCompactMode, 
+      value: props.userSettings.targetCompactMode,
       onChange: props.onChangeTargetCompactMode,
       tooltip: "Compact target text: last three elevation digits",
       label: "c",
-      className: "", 
+      className: "",
       classNameTrue: "pink",
-      styleFalse: {color: "grey"},
+      styleFalse: { color: "grey" },
 
     }),
-    div({className:"h2"}),
+    div({ className: "h2" }),
     toggleButton({
-      value: props.userSettings.targetPlacementHelper, 
+      value: props.userSettings.targetPlacementHelper,
       onChange: props.onChangeTargetPlacementHelper,
       tooltip: "Show keypads while moving target",
       label: "#?",
-      className: "", 
+      className: "",
       classNameTrue: "red",
-      styleFalse: {color: "grey"},
-
+      styleFalse: { color: "grey" },
     }),
-    div({className:"h2"}),
+    div({ className: "h2" }),
     toggleButton({
-      value: props.userSettings.targetPlacementLabel, 
+      value: props.userSettings.targetPlacementLabel,
       onChange: props.onChangeTargetPlacementLabel,
       tooltip: "Show keypad label while moving target",
       label: "A1",
-      className: "", 
+      className: "",
       classNameTrue: "red",
-      styleFalse: {color: "grey"},
+      styleFalse: { color: "grey" },
 
     }),
-    div({className:"h2"}),
+    div({ className: "h2" }),
     h("input", {
-      type: "number", 
-      className: "textInput numberInput", 
-      value: props.userSettings.fontSize, 
+      type: "number",
+      className: "textInput numberInput",
+      value: props.userSettings.fontSize,
       onChange: props.onChangeFontSize,
       title: "font size",
     }),
   ])
 ]
 
-const extraButtons = (props:{userSettings: UserSettings, uiState: UIState} & any) => [
-  div({className: "flexRow", }, [
+const extraButtons = (props: { userSettings: UserSettings, uiState: UIState } & any) => [
+  div({ className: "flexRow", }, [
     toggleButton({
-      value: props.userSettings.extraButtonsAlwaysShown, 
+      value: props.userSettings.extraButtonsAlwaysShown,
       onChange: props.onChangeExtraButtons,
       tooltip: "Show extra buttons in collapsed mode",
       label: "m.",
-      className: "", 
+      className: "",
       classNameTrue: "yellow",
-      styleFalse: {color: "grey"},
+      styleFalse: { color: "grey" },
     }),
-    div({className: "h2"}, []),
-    toggleButton({
-      value: props.userSettings.deleteMode, 
-      onChange: props.onChangeDeleteMode,
-      tooltip: "Delete items with single click/touch",
-      label: "-I",
-      className: "", 
-      classNameTrue: "red",
-      styleFalse: {color: "grey"},
-    }),
-    div({className:"h2"}),
-    toggleButton({
-      value: props.uiState.weaponCreationMode, 
-      onChange: props.onChangeWeaponCreationMode,
-      tooltip: "Place target or weapon markers by default (shift + double click always places weapons)",
-      label: [
-        h("span", {className: props.uiState.weaponCreationMode ? "grey" : "red"}, ["T "]), 
-        h("span", {className: props.uiState.weaponCreationMode ? "green" : "grey"}, ["W"])
-      ],
-    }),
+    div({ className: "h2" }, []),
+    /* toggleButton({
+       value: props.userSettings.deleteMode,
+       onChange: props.onChangeDeleteMode,
+       tooltip: "Delete items with single click/touch",
+       label: "-I",
+       className: "",
+       classNameTrue: "red",
+       styleFalse: { color: "grey" },
+     }),
+     div({ className: "h2" }),
+     toggleButton({
+       value: props.uiState.weaponCreationMode,
+       onChange: props.onChangeWeaponCreationMode,
+       tooltip: "Place target or weapon markers by default (shift + double click always places weapons)",
+       label: [
+         h("span", { className: props.uiState.weaponCreationMode ? "grey" : "red" }, ["T "]),
+         h("span", { className: props.uiState.weaponCreationMode ? "green" : "grey" }, ["W"])
+       ],
+     }),
     div({ className: "h2" }),
+    */
     div({ className: "v1" }, []),
     div({
-      style: { "font-size": "11px" },
+      style: { "font-size": "13px", "width" : "100%" },
       className: "divButton ",
       title: "Remove all targets",
       onClick: props.onClickRemoveAllTargets
@@ -386,29 +389,46 @@ const extraButtons = (props:{userSettings: UserSettings, uiState: UIState} & any
   div({ className: "v2" }, []),
   div({ className: "flexRow", }, [
     div({
-      style: { "width": "100%" },
+      style: { "width": "45%" },
       className: "divButton ",
-      title: "Sync All Targets",
-      onClick: () =>  props.onClickSync(props.state)
+      title: "Sync Targets",
+      onClick: () => props.onClickSync(props.state)
     }, "Sync Targets"),
+    div({ className: "h2" }, []),
+    toggleButton({
+      value: props.userSettings.alwaysSyncMap,
+      tooltip: "Continuously sync Map",
+      styleFalse: { "width": "55%", color: "gray" },
+      styleTrue: { "width": "55%" },
+      label: "Cont. Sync map",
+      className: "",
+      classNameTrue: "green",
+      onChange: () => {
+        if (!props.userSettings.alwaysSyncMap) {
+          props.onChangeAlwaysSyncMap({ target: { value: !props.userSettings.alwaysSyncMap } });
+          props.onClickSyncMap(props, false, true);
+        } else {
+          props.onChangeAlwaysSyncMap({ target: { value: !props.userSettings.alwaysSyncMap } });
+        }
+      },
+    }),
   ]),
   div({ className: "v2" }, []),
   div({ className: "flexRow", }, [
     div({
       style: { "width": "32%" },
       className: "divButton ",
-      title: "Sync Map",
-      onClick: () =>  props.onClickSyncMap(props.state,false)
+      title: "Sync Map Once",
+      onClick: () => props.onClickSyncMap(props, false, false)
     }, "Sync Map"),
     div({ className: "h2" }),
     div({
-     // style: { "width": "49%" },
+      // style: { "width": "49%" },
       className: "divButton ",
-      title: "Sync Map Active Squad",
-      onClick: () =>  props.onClickSyncMap(props.state,true)
+      title: "Sync Map Once and it will make Squad active window",
+      onClick: () => props.onClickSyncMap(props, true, false)
     }, "Sync Map Active Squad"),
   ]),
-
 ]
 
 
@@ -432,7 +452,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   onChangeWeaponPlacementHelper: (e: any) => dispatch(writeUserSettings("weaponPlacementHelper", e.target.value)),
   onChangeWeaponPlacementLabel: (e: any) => dispatch(writeUserSettings("weaponPlacementLabel", e.target.value)),
 
-  onChangeMapGrid: (e: any) => {dispatch(writeUserSettings("mapGrid", e.target.value))},
+  onChangeMapGrid: (e: any) => { dispatch(writeUserSettings("mapGrid", e.target.value)) },
   onChangeTargetSpread: (e: any) => dispatch(writeUserSettings("targetSpread", e.target.value)),
   onChangeTargetSplash: (e: any) => dispatch(writeUserSettings("targetSplash", e.target.value)),
   onChangeTargetDistance: (e: any) => dispatch(writeUserSettings("targetDistance", e.target.value)),
@@ -445,15 +465,16 @@ const mapDispatchToProps = (dispatch: any) => ({
   onChangeWeaponHeightOverGround: (entityId: EntityId) => (e: any) => dispatch(setWeaponHeightOverGroundMeters(entityId, parseInt(e.target.value))), //dispatch(writeUserSettings("extraWeaponHeight", parseInt(e.target.value))),
   onClickRemoveAllTargets: (e: any) => dispatch(removeAllTargets()),
   onClickSync: (e: any) => dispatch(syncTargets(e)),
-  onClickSyncMap: (e: any, active: boolean) => dispatch(syncMap(e,active)),
+  onClickSyncMap: (e: any, active: boolean, isToggle: boolean) => dispatch(syncMap(e, active, isToggle)),
   onChangeDeleteMode: (e: any) => dispatch(writeUserSettings("deleteMode", e.target.value)),
+  onChangeAlwaysSyncMap: (e: any) => dispatch(writeUserSettings("alwaysSyncMap", e.target.value)),
   onChangeExtraButtons: (e: any) => dispatch(writeUserSettings("extraButtonsAlwaysShown", e.target.value)),
   onChangeWeaponCreationMode: (e: any) => dispatch(writeUIState("weaponCreationMode", e.target.value)),
   setWeaponActive: (entityId: EntityId, newState: boolean) => dispatch(setWeaponActive(entityId, newState)),
   pickActiveWeapon: (entityId: EntityId, newState: boolean) => dispatch(pickActiveWeapon(entityId)),
   setCollapsed: (e: any) => dispatch(writeUserSettings("leftPanelCollapsed", e.target.value)),
 
-  newSession: (serverAddress: string, world: World) =>  dispatch(createSession(serverAddress, world)),
+  newSession: (serverAddress: string, world: World) => dispatch(createSession(serverAddress, world)),
   join: (serverAddress: string, sessionId: string) => dispatch(join(serverAddress, sessionId)),
   leave: () => dispatch(leave()),
   sendMessage: (userId: string, message: string) => dispatch(sendMessage(userId, message)),
@@ -466,7 +487,7 @@ const connectedLeftPanel = connect(
 )(leftPanel)
 
 export const makeLeftPanel: (store: any) => any =
-  store =>  h(Provider, {store},
+  store => h(Provider, { store },
     h(connectedLeftPanel)
   )
 
