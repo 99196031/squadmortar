@@ -6,7 +6,8 @@
 Func createGUI()
 	Local $hGUIWidth = 560
 	Local $hGUIHeight = 300
-	$hGUI = GUICreate("Auto SquadMortar 1.8.3", $hGUIWidth, $hGUIHeight, -1, -1, $WS_SYSMENU + $WS_MINIMIZEBOX)
+	Local $sVersion = FileRead(@ScriptDir & "\VERSION.txt")
+	$hGUI = GUICreate("Auto SquadMortar " & $sVersion, $hGUIWidth, $hGUIHeight, -1, -1, $WS_SYSMENU + $WS_MINIMIZEBOX)
 	GUISetOnEvent($GUI_EVENT_CLOSE, "exitScript")
 	GUISetBkColor(0x202225)
 	$iLog = GUICtrlCreateEdit("", 10, 10, $hGUIWidth - 25, $hGUIHeight - 115, BitOR($ES_AUTOVSCROLL, $ES_AUTOHSCROLL, $ES_WANTRETURN, $WS_VSCROLL, $ES_READONLY))
@@ -104,8 +105,14 @@ Func loadDataLog($iLogData)
 EndFunc   ;==>loadDataLog
 
 Func eventButtonUpdateClick()
-	ShellExecute("scripts\update.bat")
-	exitScript()
+	Local $sVersion = FileRead(@ScriptDir & "\VERSION.txt")
+	Local $sRemoteVersion = InetRead("https://raw.githubusercontent.com/Devil4ngle/squadmortar/release/VERSION.txt")
+	If $sVersion == $sRemoteVersion Then
+		ShellExecute("scripts\update.bat")
+		exitScript()
+	Else
+		MsgBox($MB_OK, "Up to date", "Your script is up to date.")
+	EndIf
 EndFunc   ;==>eventButtonUpdateClick
 
 Func eventButtonGithubClick()

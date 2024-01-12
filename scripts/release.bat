@@ -18,6 +18,7 @@ git clone --no-checkout  -b release https://github.com/Devil4ngle/squadmortar.gi
 
 :: Copy squadmortar.exe to the 'release' folder
 copy squadmortar.exe release
+copy VERSION.txt release
 
 :: Create the 'release\scripts' folder if it doesn't exist
 mkdir release\scripts
