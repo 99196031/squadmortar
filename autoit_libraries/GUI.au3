@@ -106,12 +106,13 @@ EndFunc   ;==>loadDataLog
 
 Func eventButtonUpdateClick()
 	Local $sVersion = FileRead(@ScriptDir & "\VERSION.txt")
-	Local $sRemoteVersion = InetRead("https://raw.githubusercontent.com/Devil4ngle/squadmortar/release/VERSION.txt")
+	Local $dData = InetRead("https://raw.githubusercontent.com/Devil4ngle/squadmortar/release/VERSION.txt")
+	$sRemoteVersion = BinaryToString($dData)
 	If $sVersion == $sRemoteVersion Then
+		MsgBox($MB_OK, "Up to date", "Your script is up to date.")
+	Else
 		ShellExecute("scripts\update.bat")
 		exitScript()
-	Else
-		MsgBox($MB_OK, "Up to date", "Your script is up to date.")
 	EndIf
 EndFunc   ;==>eventButtonUpdateClick
 
