@@ -3,6 +3,8 @@
 #include <EditConstants.au3>
 #include <GDIPlus.au3>
 
+Global $hBrowser = ""
+
 Func createGUI()
 	Local $hGUIWidth = 560
 	Local $hGUIHeight = 300
@@ -81,8 +83,8 @@ Func loadDataLog($iLogData)
 	EndIf
 	customConsole($iLogData, "")
 	customConsole($iLogData, "Set in Squad following options:")
-	customConsole($iLogData, "  • CONTROLS -> INFANTRY -> FIRE/USE -> ALTERNATIVE = I")
-	customConsole($iLogData, "  • CONTROLS -> INFANTRY -> AIM DOWN SIGHTS -> ALTERNATIVE = O")
+	customConsole($iLogData, "  • CONTROLS -> INFANTRY -> FIRE/USE -> ALTERNATIVE = O")
+	customConsole($iLogData, "  • CONTROLS -> INFANTRY -> AIM DOWN SIGHTS -> ALTERNATIVE = P")
 	customConsole($iLogData, "")
 	customConsole($iLogData, "If you intend to use sync targets and sync map:") ;
 	customConsole($iLogData, "  • If you have only one monitor, play at 1024x768 in windowed mode.")
@@ -98,6 +100,7 @@ Func loadDataLog($iLogData)
 	customConsole($iLogData, "  • Squad MUST be visible (It can't be covered).")
 	customConsole($iLogData, "  • Sync Targets only works with Standard Mortar.")
 	customConsole($iLogData, "  • To activate the Sync Target Feature you need to be in a mortar and be in aiming mode.")
+	customConsole($iLogData, "  • Hotkey '.' as DOT to switch fast between Squad and the Website")
 	customConsole($iLogData, "")
 	customConsole($iLogData, "Optional Improvements:")
 	customConsole($iLogData, "  • Tab -> Right site of screen -> Map Icon Scale 0.3")
@@ -117,7 +120,7 @@ Func eventButtonUpdateClick()
 EndFunc   ;==>eventButtonUpdateClick
 
 Func eventButtonGithubClick()
-	ShellExecute("https://github.com/Devil4ngle/squadmortar/releases")
+	ShellExecute("https://github.com/Devil4ngle/squadmortar")
 EndFunc   ;==>eventButtonGithubClick
 
 Func eventButtonDiscordClick()
@@ -126,4 +129,6 @@ EndFunc   ;==>eventButtonDiscordClick
 
 Func eventButtonOpenHTMLFileClick()
 	ShellExecute("http://localhost:3000/", "", @ScriptDir, "open")
+	Sleep(200)
+	$hBrowser = WinGetHandle("[active]")
 EndFunc   ;==>eventButtonOpenHTMLFileClick

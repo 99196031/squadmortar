@@ -22,7 +22,7 @@ Local $bActiveSquadOnMapSync = $CmdLine[3]
 
 If $bActiveSquadOnMapSync == 1 Then
 	WinActivate("SquadGame")
-	Sleep(200)
+	Sleep(500)
 EndIf
 
 PixelSearch($aCoordinates[$iResolution][$iIsMapActive][0], $aCoordinates[$iResolution][$iIsMapActive][1], $aCoordinates[$iResolution][$iIsMapActive][2], $aCoordinates[$iResolution][$iIsMapActive][3], "0xFFFFFF", 0, 1, $hWnd)

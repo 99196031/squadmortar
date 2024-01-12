@@ -9,6 +9,7 @@
 #include "autoit_libraries/common.au3"
 #include "autoit_libraries/GUI.au3"
 #include "autoit_libraries/mp.au3"
+#include <Constants.au3>
 
 
 ; Enables GUI events
@@ -36,6 +37,7 @@ Else
 EndIf
 
 Func main()
+	HotKeySet(".", "switchWindow")
 	createGUI()
 	Run("scripts/squadMortarServerSilent.exe")
 	If WinExists("SquadGame") == 1 Then
@@ -69,11 +71,11 @@ Func runSquadMortar()
 			_MP_WaitAll()
 			If syncExitLoop() Then ExitLoop
 			If $bSuccess Then
-				cSend(20, 1770, "i")
-				cSend(20, 1770, "i")
-				cSend(20, 10, "i")
+				cSend(20, 1770, "o")
+				cSend(20, 1770, "o")
+				cSend(20, 10, "o")
 				cSend(0, 3100, "r")
-				cSend(0, 0, "o")
+				cSend(0, 0, "p")
 			Else
 				ExitLoop
 			EndIf
@@ -286,3 +288,14 @@ Func syncCoordinates()
 	Next
 EndFunc   ;==>syncCoordinates
 
+Func switchWindow()
+	$iState = WinGetState("SquadGame")
+	If BitAND($iState, $WIN_STATE_ACTIVE) Then
+		If $hBrowser == "" Then
+			eventButtonOpenHTMLFileClick()
+		EndIf
+		WinActivate($hBrowser)
+	Else
+		WinActivate("SquadGame")
+	EndIf
+EndFunc   ;==>switchWindow
